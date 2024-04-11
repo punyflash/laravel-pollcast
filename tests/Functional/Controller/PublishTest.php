@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Tests\Functional\Controller;
 
@@ -19,17 +21,17 @@ class PublishTest extends TestCase
         $data = ['user_id' => 1];
         $this->postAjax(route('supportpal.pollcast.publish'), [
             'channel_name' => $channelName,
-            'event'        => $event,
-            'data'         => $data,
+            'event' => $event,
+            'data' => $data,
         ])
             ->assertStatus(200)
             ->assertJson([true]);
 
         $this->assertDatabaseHas('pollcast_message_queue', [
             'channel_id' => $channel->id,
-            'member_id'  => null,
-            'event'      => $event,
-            'payload'    => json_encode($data),
+            'member_id' => null,
+            'event' => $event,
+            'payload' => json_encode($data),
         ]);
     }
 
@@ -37,8 +39,8 @@ class PublishTest extends TestCase
     {
         $this->postAjax(route('supportpal.pollcast.publish'), [
             'channel_name' => 'fake-channel',
-            'event'        => 'test-event',
-            'data'         => ['user_id' => 1],
+            'event' => 'test-event',
+            'data' => ['user_id' => 1],
         ])
             ->assertStatus(200)
             ->assertJson([false]);
@@ -50,24 +52,24 @@ class PublishTest extends TestCase
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The channel name field is required. (and 2 more errors)',
-                'errors'  => [
+                'errors' => [
                     'channel_name' => ['The channel name field is required.'],
-                    'event'        => ['The event field is required.'],
-                    'data'         => ['The data field is required.'],
-                ]
+                    'event' => ['The event field is required.'],
+                    'data' => ['The data field is required.'],
+                ],
             ]);
     }
 
     public function testPublishChannelValidation(): void
     {
         $this->postAjax(route('supportpal.pollcast.publish'), [
-            'event'        => 'test-event',
-            'data'         => ['user_id' => 1],
+            'event' => 'test-event',
+            'data' => ['user_id' => 1],
         ])
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The channel name field is required.',
-                'errors'  => ['channel_name' => ['The channel name field is required.']]
+                'errors' => ['channel_name' => ['The channel name field is required.']],
             ]);
     }
 
@@ -75,12 +77,12 @@ class PublishTest extends TestCase
     {
         $this->postAjax(route('supportpal.pollcast.publish'), [
             'channel_name' => 'fake-channel',
-            'data'         => ['user_id' => 1],
+            'data' => ['user_id' => 1],
         ])
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The event field is required.',
-                'errors'  => ['event' => ['The event field is required.']]
+                'errors' => ['event' => ['The event field is required.']],
             ]);
     }
 
@@ -88,12 +90,12 @@ class PublishTest extends TestCase
     {
         $this->postAjax(route('supportpal.pollcast.publish'), [
             'channel_name' => 'fake-channel',
-            'event'        => 'test-event',
+            'event' => 'test-event',
         ])
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The data field is required.',
-                'errors'  => ['data' => ['The data field is required.']]
+                'errors' => ['data' => ['The data field is required.']],
             ]);
     }
 }

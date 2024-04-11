@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast;
 
@@ -27,7 +29,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->publishes([
-            __DIR__ . '/../config/config.php' => config_path('pollcast.php'),
+            __DIR__.'/../config/config.php' => config_path('pollcast.php'),
         ], 'config');
     }
 
@@ -40,8 +42,8 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * Merge the given configuration with the existing configuration.
      *
-     * @param  string|mixed $path
-     * @param  string|mixed $key
+     * @param  string|mixed  $path
+     * @param  string|mixed  $key
      * @return void
      */
     protected function mergeConfigFrom(mixed $path, mixed $key)
@@ -55,8 +57,8 @@ class ServiceProvider extends BaseServiceProvider
      * Merges the configs together and takes multi-dimensional arrays into account.
      * https://medium.com/@koenhoeijmakers/properly-merging-configs-in-laravel-packages-a4209701746d
      *
-     * @param  mixed[] $original
-     * @param  mixed[] $merging
+     * @param  mixed[]  $original
+     * @param  mixed[]  $merging
      * @return mixed[]
      */
     protected function mergeConfig(array $original, array $merging): array

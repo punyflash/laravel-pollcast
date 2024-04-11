@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Database\Factories;
 
@@ -32,13 +34,13 @@ class MessageFactory extends Factory
 
         return [
             'channel_id' => Channel::factory(),
-            'member_id'  => null,
-            'event'      => 'Illuminate\Notifications\Events\BroadcastNotificationCreated',
-            'payload'    => [
-                'title'  => 'Operator Logged In',
-                'text'   => 'John Doe has logged in to the operator panel.',
-                'id'     => fake()->uuid,
-                'type'   => 'App\\Modules\\User\\Notifications\\OperatorLogin',
+            'member_id' => null,
+            'event' => 'Illuminate\Notifications\Events\BroadcastNotificationCreated',
+            'payload' => [
+                'title' => 'Operator Logged In',
+                'text' => 'John Doe has logged in to the operator panel.',
+                'id' => fake()->uuid,
+                'type' => 'App\\Modules\\User\\Notifications\\OperatorLogin',
                 'socket' => $member->socket_id,
             ],
         ];

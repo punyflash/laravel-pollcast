@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Model;
 
@@ -14,8 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Channel extends Model
 {
-    use Uuid;
     use HasFactory;
+    use Uuid;
 
     /** @var string */
     protected $table = 'pollcast_channel';

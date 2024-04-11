@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Http\Request;
 
@@ -18,8 +20,8 @@ class PublishRequest extends FormRequest
     {
         return [
             'channel_name' => ['required'],
-            'event'        => ['required'],
-            'data'         => ['required'],
+            'event' => ['required'],
+            'data' => ['required'],
         ];
     }
 }

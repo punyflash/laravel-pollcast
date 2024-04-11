@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Model;
 
@@ -18,8 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Message extends Model
 {
-    use Uuid;
     use HasFactory;
+    use Uuid;
 
     /** @var string */
     protected $table = 'pollcast_message_queue';
@@ -39,9 +41,9 @@ class Message extends Model
     /** @var array<string, string> */
     protected $casts = [
         'channel_id' => 'string',
-        'member_id'  => 'string',
-        'event'      => 'string',
-        'payload'    => 'json',
+        'member_id' => 'string',
+        'event' => 'string',
+        'payload' => 'json',
     ];
 
     /** @var string */

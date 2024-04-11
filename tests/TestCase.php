@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Tests;
 
@@ -21,7 +23,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->loadMigrationsFrom([
             '--database' => 'testing',
-            '--path'     => realpath(__DIR__ . '/../database/migrations'),
+            '--path' => realpath(__DIR__.'/../database/migrations'),
         ]);
     }
 
@@ -36,8 +38,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Get application aliases.
      *
-     * @param mixed|Application $app
-     *
+     * @param  mixed|Application  $app
      * @return string[]
      */
     protected function getApplicationAliases(mixed $app): array
@@ -48,8 +49,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Get application providers.
      *
-     * @param mixed|Application $app
-     *
+     * @param  mixed|Application  $app
      * @return string[]
      */
     protected function getPackageProviders(mixed $app): array
@@ -60,8 +60,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param mixed|Application $app
-     *
+     * @param  mixed|Application  $app
      * @return void
      */
     protected function getEnvironmentSetUp(mixed $app)
@@ -80,16 +79,14 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         return [
             'HTTP_X-Requested-With' => 'XMLHttpRequest',
-            'HTTP_Accept'           => 'application/json'
+            'HTTP_Accept' => 'application/json',
         ];
     }
 
     /**
      * Perform a POST that pretends to be an AJAX request.
      *
-     * @param  string $route
      * @param  mixed[]  $data
-     * @return TestResponse
      */
     public function postAjax(string $route, array $data = []): TestResponse
     {

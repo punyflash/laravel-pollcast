@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Http\Controller;
 
@@ -32,8 +34,8 @@ class ChannelController extends BroadcastController
     {
         return new JsonResponse([
             'status' => 'success',
-            'id'     => $this->socket->id(),
-            'time'   => Carbon::now()->toDateTimeString()
+            'id' => $this->socket->id(),
+            'time' => Carbon::now()->toDateTimeString(),
         ]);
     }
 

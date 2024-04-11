@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Database\Factories;
 
@@ -29,8 +31,8 @@ class MemberFactory extends Factory
     {
         return [
             'channel_id' => Channel::factory(),
-            'socket_id'  => fake()->uuid,
-            'data'       => null,
+            'socket_id' => fake()->uuid,
+            'data' => null,
         ];
     }
 }

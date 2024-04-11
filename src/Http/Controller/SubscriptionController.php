@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Http\Controller;
 
@@ -46,8 +48,8 @@ class SubscriptionController
 
         return new JsonResponse([
             'status' => 'success',
-            'time'   => $time->toDateTimeString('microsecond'),
-            'events' => $messages
+            'time' => $time->toDateTimeString('microsecond'),
+            'events' => $messages,
         ]);
     }
 
@@ -63,8 +65,8 @@ class SubscriptionController
     }
 
     /**
-     * @param Collection<int, Member> $members
-     * @param Collection<string, string> $channels
+     * @param  Collection<int, Member>  $members
+     * @param  Collection<string, string>  $channels
      * @return Collection<int, Message>
      */
     protected function getMessagesForRequest(

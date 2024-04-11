@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Tests\Functional\Controller;
 
@@ -26,42 +28,42 @@ class SubscriptionTest extends TestCase
 
     public function testMessagesNoneQueued(): void
     {
-        [$channel,] = $this->setupChannelAndMember();
+        [$channel] = $this->setupChannelAndMember();
 
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => [$channel->name],
-            'time'     => Carbon::now()->toDateTimeString('microsecond'),
+            'time' => Carbon::now()->toDateTimeString('microsecond'),
         ])
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'time'   => Carbon::now()->toDateTimeString('microsecond'),
+                'time' => Carbon::now()->toDateTimeString('microsecond'),
                 'events' => [],
             ]);
     }
 
     public function testMessagesOneQueued(): void
     {
-        [$channel,] = $this->setupChannelAndMember();
+        [$channel] = $this->setupChannelAndMember();
 
         $event = 'test-event';
         $message = Message::factory()->create(['channel_id' => $channel->id, 'event' => $event, 'created_at' => '2021-06-01 11:59:57']);
 
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => [$channel->name => [$event]],
-            'time'     => '2021-06-01 11:59:55',
+            'time' => '2021-06-01 11:59:55',
         ])
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'time'   => Carbon::now()->toDateTimeString('microsecond'),
+                'time' => Carbon::now()->toDateTimeString('microsecond'),
                 'events' => [$message->load('channel')->toArray()],
             ]);
     }
 
     public function testMessagesMultipleQueued(): void
     {
-        [$channel,] = $this->setupChannelAndMember();
+        [$channel] = $this->setupChannelAndMember();
 
         $event1 = 'test-event';
         $event2 = 'new-event';
@@ -73,49 +75,49 @@ class SubscriptionTest extends TestCase
 
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => [$channel->name => [$event1, $event2]],
-            'time'     => '2021-06-01 11:59:55',
+            'time' => '2021-06-01 11:59:55',
         ])
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'time'   => Carbon::now()->toDateTimeString('microsecond'),
+                'time' => Carbon::now()->toDateTimeString('microsecond'),
                 'events' => [$message1->load('channel')->toArray(), $message2->load('channel')->toArray()],
             ]);
     }
 
     public function testMessagesNotDuplicated(): void
     {
-        [$channel,] = $this->setupChannelAndMember();
+        [$channel] = $this->setupChannelAndMember();
 
         $event = 'test-event';
         $message = Message::factory()->create(['channel_id' => $channel->id, 'event' => $event, 'created_at' => '2021-06-01 11:59:57']);
 
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => [$channel->name => [$event]],
-            'time'     => '2021-06-01 11:59:55',
+            'time' => '2021-06-01 11:59:55',
         ])
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'time'   => $time = Carbon::now()->toDateTimeString('microsecond'),
+                'time' => $time = Carbon::now()->toDateTimeString('microsecond'),
                 'events' => [$message->load('channel')->toArray()],
             ]);
 
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => [$channel->name => [$event]],
-            'time'     => $time,
+            'time' => $time,
         ])
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'time'   => Carbon::now()->toDateTimeString('microsecond'),
+                'time' => Carbon::now()->toDateTimeString('microsecond'),
                 'events' => [],
             ]);
     }
 
     public function testMessagesOrdering(): void
     {
-        [$channel,] = $this->setupChannelAndMember();
+        [$channel] = $this->setupChannelAndMember();
 
         $event = 'test-event';
         $message1 = Message::factory()->create(['channel_id' => $channel->id, 'event' => $event, 'created_at' => '2021-06-01 11:59:56.123456']);
@@ -124,13 +126,13 @@ class SubscriptionTest extends TestCase
 
         $params = [
             'channels' => [$channel->name => [$event]],
-            'time'     => '2021-06-01 11:59:55',
+            'time' => '2021-06-01 11:59:55',
         ];
         $response = $this->postAjax(route('supportpal.pollcast.receive'), $params)
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'time'   => Carbon::now()->toDateTimeString('microsecond'),
+                'time' => Carbon::now()->toDateTimeString('microsecond'),
             ]);
 
         $json = $response->decodeResponseJson();
@@ -145,7 +147,7 @@ class SubscriptionTest extends TestCase
                     $order,
                     $json['events'][$order]['id'],
                     $id,
-                    implode(', ', $expected)
+                    implode(', ', $expected),
                 ])
             );
         }
@@ -157,17 +159,17 @@ class SubscriptionTest extends TestCase
 
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => [$channel->name],
-            'time'     => Carbon::now()->toDateTimeString('microsecond'),
+            'time' => Carbon::now()->toDateTimeString('microsecond'),
         ])
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'time'   => Carbon::now()->toDateTimeString('microsecond'),
+                'time' => Carbon::now()->toDateTimeString('microsecond'),
                 'events' => [],
             ]);
 
         $this->assertDatabaseHas('pollcast_channel_members', [
-            'id'         => $member->id,
+            'id' => $member->id,
             'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
     }
@@ -179,21 +181,21 @@ class SubscriptionTest extends TestCase
 
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => [$channel1->name, $channel2->name],
-            'time'     => Carbon::now()->toDateTimeString('microsecond'),
+            'time' => Carbon::now()->toDateTimeString('microsecond'),
         ])
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'time'   => Carbon::now()->toDateTimeString('microsecond'),
+                'time' => Carbon::now()->toDateTimeString('microsecond'),
                 'events' => [],
             ]);
 
         $this->assertDatabaseHas('pollcast_channel_members', [
-            'id'         => $member1->id,
+            'id' => $member1->id,
             'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
         $this->assertDatabaseHas('pollcast_channel_members', [
-            'id'         => $member2->id,
+            'id' => $member2->id,
             'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
     }
@@ -202,7 +204,7 @@ class SubscriptionTest extends TestCase
     {
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => ['fake-channel'],
-            'time'     => Carbon::now()->toDateTimeString('microsecond'),
+            'time' => Carbon::now()->toDateTimeString('microsecond'),
         ])
             ->assertStatus(200)
             ->assertJson(['status' => 'error']);
@@ -214,10 +216,10 @@ class SubscriptionTest extends TestCase
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The channels field is required. (and 1 more error)',
-                'errors'  => [
+                'errors' => [
                     'channels' => ['The channels field is required.'],
-                    'time'     => ['The time field is required.'],
-                ]
+                    'time' => ['The time field is required.'],
+                ],
             ]);
     }
 
@@ -229,7 +231,7 @@ class SubscriptionTest extends TestCase
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The time field is required.',
-                'errors'  => ['time' => ['The time field is required.']]
+                'errors' => ['time' => ['The time field is required.']],
             ]);
     }
 
@@ -239,12 +241,12 @@ class SubscriptionTest extends TestCase
     private function setupChannelAndMember(): array
     {
         $socketId = 'test';
-        session([ Socket::UUID => $socketId ]);
+        session([Socket::UUID => $socketId]);
 
-        $channel = Channel::factory()->create([ 'name' => 'public-channel' ]);
+        $channel = Channel::factory()->create(['name' => 'public-channel']);
         $member = Member::factory()->create([
             'channel_id' => $channel->id,
-            'socket_id'  => $socketId,
+            'socket_id' => $socketId,
             'updated_at' => Carbon::now()->subSeconds(5)->toDateTimeString(),
         ]);
 

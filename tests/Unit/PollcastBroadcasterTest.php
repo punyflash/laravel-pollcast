@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Tests\Unit;
 
@@ -34,7 +36,7 @@ class PollcastBroadcasterTest extends TestCase
 
         $this->assertEquals([
             'user_id' => $user->id,
-            'user_info' => true
+            'user_info' => true,
         ], $broadcaster->auth($request));
     }
 
@@ -51,7 +53,7 @@ class PollcastBroadcasterTest extends TestCase
 
         $this->assertEquals([
             'user_id' => $user->id,
-            'user_info' => $user
+            'user_info' => $user,
         ], $broadcaster->auth($request));
     }
 
@@ -70,7 +72,7 @@ class PollcastBroadcasterTest extends TestCase
 
         $this->assertEquals([
             'user_id' => $user->id,
-            'user_info' => $data
+            'user_info' => $data,
         ], $broadcaster->auth($request));
     }
 
@@ -108,9 +110,9 @@ class PollcastBroadcasterTest extends TestCase
         foreach ($channels as $channel) {
             $this->assertDatabaseHas('pollcast_message_queue', [
                 'channel_id' => $channel->id,
-                'member_id'  => null,
-                'event'      => $eventName,
-                'payload'    => json_encode(['socket' => 'x']),
+                'member_id' => null,
+                'event' => $eventName,
+                'payload' => json_encode(['socket' => 'x']),
             ]);
         }
 
@@ -126,30 +128,30 @@ class PollcastBroadcasterTest extends TestCase
 
         $channelName1 = 'public-channel';
         $channel1 = Channel::factory()->create([
-            'name'       => $channelName1,
-            'updated_at' => Carbon::now()->subDays(2)->toDateTimeString()
+            'name' => $channelName1,
+            'updated_at' => Carbon::now()->subDays(2)->toDateTimeString(),
         ]);
 
         $channelName2 = 'private-channel';
         $channel2 = Channel::factory()->create([
-            'name'       => $channelName2,
-            'updated_at' => Carbon::now()->subDay()->toDateTimeString()
+            'name' => $channelName2,
+            'updated_at' => Carbon::now()->subDay()->toDateTimeString(),
         ]);
 
         $member1 = Member::factory()->create([
             'channel_id' => $channel2->id,
             'updated_at' => Carbon::now()->subSeconds(45)->toDateTimeString(),
-            'data'       => ['member1']
+            'data' => ['member1'],
         ]);
         $member2 = Member::factory()->create([
             'channel_id' => $channel2->id,
             'updated_at' => Carbon::now()->subSeconds(5)->toDateTimeString(),
-            'data'       => ['member2']
+            'data' => ['member2'],
         ]);
         $member3 = Member::factory()->create([
             'channel_id' => $channel1->id,
             'updated_at' => Carbon::now()->subSeconds(45)->toDateTimeString(),
-            'data'       => ['member3']
+            'data' => ['member3'],
         ]);
 
         $message1 = Message::factory()->create([
@@ -244,9 +246,6 @@ class PollcastBroadcasterTest extends TestCase
         $this->assertDatabaseHas('pollcast_channel_members', ['id' => $member->id]);
     }
 
-    /**
-     * @return PollcastBroadcaster
-     */
     private function setupBroadcaster(): PollcastBroadcaster
     {
         session([Socket::UUID => 'test']);

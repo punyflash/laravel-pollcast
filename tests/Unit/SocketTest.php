@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Tests\Unit;
 
@@ -34,8 +36,8 @@ class SocketTest extends TestCase
         $channel = Channel::where('name', $channelName)->firstOrFail();
         $this->assertDatabaseHas('pollcast_channel_members', [
             'channel_id' => $channel->id,
-            'socket_id'  => $socketId,
-            'data'       => null,
+            'socket_id' => $socketId,
+            'data' => null,
         ]);
     }
 
@@ -55,22 +57,22 @@ class SocketTest extends TestCase
 
         $this->assertDatabaseHas('pollcast_channel_members', [
             'channel_id' => $channel->id,
-            'socket_id'  => $socketId,
-            'data'       => json_encode($data),
+            'socket_id' => $socketId,
+            'data' => json_encode($data),
         ]);
 
         $this->assertDatabaseHas('pollcast_message_queue', [
             'channel_id' => $channel->id,
-            'member_id'  => $member->id,
-            'event'      => 'pollcast:subscription_succeeded',
-            'payload'    => json_encode([$data]),
+            'member_id' => $member->id,
+            'event' => 'pollcast:subscription_succeeded',
+            'payload' => json_encode([$data]),
         ]);
 
         $this->assertDatabaseHas('pollcast_message_queue', [
             'channel_id' => $channel->id,
-            'member_id'  => null,
-            'event'      => 'pollcast:member_added',
-            'payload'    => json_encode($data),
+            'member_id' => null,
+            'event' => 'pollcast:member_added',
+            'payload' => json_encode($data),
         ]);
     }
 
@@ -88,7 +90,7 @@ class SocketTest extends TestCase
 
         $this->assertDatabaseMissing('pollcast_channel_members', [
             'channel_id' => $channel->id,
-            'socket_id'  => $socketId,
+            'socket_id' => $socketId,
         ]);
     }
 
@@ -106,14 +108,14 @@ class SocketTest extends TestCase
 
         $this->assertDatabaseMissing('pollcast_channel_members', [
             'channel_id' => $channel->id,
-            'socket_id'  => $socketId,
+            'socket_id' => $socketId,
         ]);
 
         $this->assertDatabaseHas('pollcast_message_queue', [
             'channel_id' => $channel->id,
-            'member_id'  => null,
-            'event'      => 'pollcast:member_removed',
-            'payload'    => json_encode([]),
+            'member_id' => null,
+            'event' => 'pollcast:member_removed',
+            'payload' => json_encode([]),
         ]);
     }
 
@@ -132,14 +134,14 @@ class SocketTest extends TestCase
 
         $this->assertDatabaseMissing('pollcast_channel_members', [
             'channel_id' => $channel->id,
-            'socket_id'  => $socketId,
+            'socket_id' => $socketId,
         ]);
 
         $this->assertDatabaseHas('pollcast_message_queue', [
             'channel_id' => $channel->id,
-            'member_id'  => null,
-            'event'      => 'pollcast:member_removed',
-            'payload'    => json_encode($member->data),
+            'member_id' => null,
+            'event' => 'pollcast:member_removed',
+            'payload' => json_encode($member->data),
         ]);
     }
 }

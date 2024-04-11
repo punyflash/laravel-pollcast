@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Http\Request;
 
@@ -17,8 +19,8 @@ class ReceiveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'channels'  => ['required', 'array'],
-            'time'      => ['required'],
+            'channels' => ['required', 'array'],
+            'time' => ['required'],
         ];
     }
 }

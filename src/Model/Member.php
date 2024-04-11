@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Model;
 
@@ -17,8 +19,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Member extends Model
 {
-    use Uuid;
     use HasFactory;
+    use Uuid;
 
     /** @var string */
     protected $table = 'pollcast_channel_members';
@@ -38,8 +40,8 @@ class Member extends Model
     /** @var array<string, string> */
     protected $casts = [
         'channel_id' => 'string',
-        'socket_id'  => 'string',
-        'data'       => 'json',
+        'socket_id' => 'string',
+        'data' => 'json',
     ];
 
     /**

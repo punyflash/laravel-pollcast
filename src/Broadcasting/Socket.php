@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Broadcasting;
 
@@ -30,7 +32,7 @@ class Socket
     }
 
     /**
-     * @param mixed[]|null $data
+     * @param  mixed[]|null  $data
      */
     public function joinChannel(string $name, ?array $data = null): void
     {
@@ -41,7 +43,7 @@ class Socket
         /** @var Member $member */
         $member = Member::query()->firstOrCreate([
             'channel_id' => $channel->id,
-            'socket_id'  => $this->id(),
+            'socket_id' => $this->id(),
         ], ['data' => $data]);
 
         if ($data === null) {
@@ -61,8 +63,8 @@ class Socket
 
         (new Message([
             'channel_id' => $channel->id,
-            'event'      => 'pollcast:member_removed',
-            'payload'    => $member->data ?? [],
+            'event' => 'pollcast:member_removed',
+            'payload' => $member->data ?? [],
         ]))->save();
     }
 
@@ -81,23 +83,23 @@ class Socket
     }
 
     /**
-     * @param mixed[] $memberData
+     * @param  mixed[]  $memberData
      */
     protected function joinedPresenceChannel(Channel $channel, Member $member, array $memberData): void
     {
         // Broadcast subscription succeeded event to the member.
         (new Message([
             'channel_id' => $channel->id,
-            'member_id'  => $member->id,
-            'event'      => 'pollcast:subscription_succeeded',
-            'payload'    => Member::query()->where('channel_id', $channel->id)->pluck('data'),
+            'member_id' => $member->id,
+            'event' => 'pollcast:subscription_succeeded',
+            'payload' => Member::query()->where('channel_id', $channel->id)->pluck('data'),
         ]))->save();
 
         // Broadcast member added event to everyone in the channel.
         (new Message([
             'channel_id' => $channel->id,
-            'event'      => 'pollcast:member_added',
-            'payload'    => $memberData,
+            'event' => 'pollcast:member_added',
+            'payload' => $memberData,
         ]))->save();
     }
 }

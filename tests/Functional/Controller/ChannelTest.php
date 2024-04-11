@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Tests\Functional\Controller;
 
@@ -26,8 +28,8 @@ class ChannelTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'id'     => session(Socket::UUID),
-                'time'   => $date
+                'id' => session(Socket::UUID),
+                'time' => $date,
             ]);
     }
 
@@ -49,7 +51,7 @@ class ChannelTest extends TestCase
         $user = UserFactory::new()->create();
 
         $this->actingAs($user)
-            ->postAjax(route('supportpal.pollcast.subscribe'), ['channel_name' => 'presence-' . $channelName])
+            ->postAjax(route('supportpal.pollcast.subscribe'), ['channel_name' => 'presence-'.$channelName])
             ->assertStatus(200)
             ->assertJson([true]);
     }
@@ -72,20 +74,20 @@ class ChannelTest extends TestCase
     public function testSubscribeChannelAuthErrorMemberNoLongerAuthenticated(): void
     {
         $channelName = 'channel';
-        $channel = Channel::factory()->create(['name' => 'presence-' . $channelName]);
+        $channel = Channel::factory()->create(['name' => 'presence-'.$channelName]);
         Broadcast::channel($channelName, function (User $user) {
             return false;
         });
 
         $socketId = 'test';
-        session([ Socket::UUID => $socketId ]);
+        session([Socket::UUID => $socketId]);
         Member::factory()->create(['channel_id' => $channel->id, 'socket_id' => $socketId]);
 
         /** @var User $user */
         $user = UserFactory::new()->create();
 
         $this->actingAs($user)
-            ->postAjax(route('supportpal.pollcast.subscribe'), ['channel_name' => 'presence-' . $channelName])
+            ->postAjax(route('supportpal.pollcast.subscribe'), ['channel_name' => 'presence-'.$channelName])
             ->assertStatus(403);
     }
 
@@ -95,7 +97,7 @@ class ChannelTest extends TestCase
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The channel name field is required.',
-                'errors'  => ['channel_name' => ['The channel name field is required.']]
+                'errors' => ['channel_name' => ['The channel name field is required.']],
             ]);
     }
 
@@ -121,9 +123,9 @@ class ChannelTest extends TestCase
 
         $this->assertDatabaseHas('pollcast_message_queue', [
             'channel_id' => $channel->id,
-            'member_id'  => null,
-            'event'      => 'pollcast:member_removed',
-            'payload'    => json_encode([]),
+            'member_id' => null,
+            'event' => 'pollcast:member_removed',
+            'payload' => json_encode([]),
         ]);
     }
 
@@ -156,10 +158,6 @@ class ChannelTest extends TestCase
             ->assertJson([false]);
     }
 
-    /**
-     * @param string $channelName
-     * @return Channel
-     */
     private function setupChannel(string $channelName): Channel
     {
         return Channel::factory()->create(['name' => $channelName]);

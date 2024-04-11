@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Tests\Functional;
 
@@ -21,7 +23,7 @@ class VerifySocketIdMiddlewareTest extends TestCase
 
         $this->post(route('supportpal.pollcast.receive'), [
             'channels' => [$channel->name],
-            'time'     => now()->toDateTimeString()
+            'time' => now()->toDateTimeString(),
         ])
             ->assertStatus(200);
     }
@@ -40,7 +42,7 @@ class VerifySocketIdMiddlewareTest extends TestCase
 
         $this->postAjax(route('supportpal.pollcast.receive'), [
             'channels' => [$channel->name],
-            'time'     => now()->toDateTimeString()
+            'time' => now()->toDateTimeString(),
         ])
             ->assertStatus(500);
     }
@@ -48,10 +50,10 @@ class VerifySocketIdMiddlewareTest extends TestCase
     private function setupChannelAndMember(): Channel
     {
         $socketId = 'test';
-        session([ Socket::UUID => $socketId ]);
+        session([Socket::UUID => $socketId]);
 
-        $channel = Channel::factory()->create([ 'name' => 'public-channel' ]);
-        Member::factory()->create([ 'channel_id' => $channel->id, 'socket_id' => $socketId ]);
+        $channel = Channel::factory()->create(['name' => 'public-channel']);
+        Member::factory()->create(['channel_id' => $channel->id, 'socket_id' => $socketId]);
 
         return $channel;
     }

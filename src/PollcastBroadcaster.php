@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast;
 
@@ -25,8 +27,6 @@ class PollcastBroadcaster extends Broadcaster
 
     /**
      * PollcastBroadcaster constructor.
-     *
-     * @param Socket $socket
      */
     public function __construct(Socket $socket)
     {
@@ -36,7 +36,7 @@ class PollcastBroadcaster extends Broadcaster
     /**
      * Authenticate the incoming request for a given channel.
      *
-     * @param mixed|Request $request
+     * @param  mixed|Request  $request
      * @return mixed
      */
     public function auth(mixed $request)
@@ -55,17 +55,16 @@ class PollcastBroadcaster extends Broadcaster
     /**
      * Return the valid authentication response.
      *
-     * @param mixed|Request $request
-     * @param mixed $result
+     * @param  mixed|Request  $request
      * @return mixed[]
      */
     public function validAuthenticationResponse(mixed $request, mixed $result)
     {
         $channelName = $this->normalizeChannelName($request->channel_name);
-        $user        = $this->retrieveUser($request, $channelName);
+        $user = $this->retrieveUser($request, $channelName);
 
         return [
-            'user_id'   => $user->getAuthIdentifier(),
+            'user_id' => $user->getAuthIdentifier(),
             'user_info' => $result,
         ];
     }
@@ -73,9 +72,9 @@ class PollcastBroadcaster extends Broadcaster
     /**
      * Broadcast the given event.
      *
-     * @param  mixed[] $channels
-     * @param  mixed|string $event
-     * @param  mixed[] $payload
+     * @param  mixed[]  $channels
+     * @param  mixed|string  $event
+     * @param  mixed[]  $payload
      * @return void
      */
     public function broadcast(array $channels, mixed $event, array $payload = [])
@@ -90,8 +89,8 @@ class PollcastBroadcaster extends Broadcaster
 
             $message = new Message([
                 'channel_id' => $channel->id,
-                'event'      => $event,
-                'payload'    => $payload,
+                'event' => $event,
+                'payload' => $payload,
             ]);
 
             $messages->push($message->setUuid()->touchTimestamps()->getAttributes());
@@ -129,8 +128,6 @@ class PollcastBroadcaster extends Broadcaster
 
     /**
      * Determine if the odds hit the lottery (1 in 10).
-     *
-     * @return bool
      */
     protected function hitsLottery(): bool
     {

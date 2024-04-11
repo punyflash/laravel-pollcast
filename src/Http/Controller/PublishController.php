@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SupportPal\Pollcast\Http\Controller;
 
@@ -25,8 +27,8 @@ class PublishController
 
         (new Message([
             'channel_id' => $channel->id,
-            'event'      => $request->event,
-            'payload'    => $request->data,
+            'event' => $request->event,
+            'payload' => $request->data,
         ]))->save();
 
         return new JsonResponse([true]);
